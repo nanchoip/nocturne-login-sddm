@@ -1,0 +1,14 @@
+[SddmGreeterTheme]
+Name=Nocturne Login
+Description=Pantalla de inicio de sesion oscura con panel lateral y reloj grande, paleta Catppuccin Mocha
+Author=nanchoip
+License=MIT
+Type=sddm-theme
+Version=0.1.0
+Website=https://github.com/nanchoip/nocturne-login-sddm
+Screenshot=
+MainScript=Main.qml
+ConfigFile=theme.conf
+Theme-Id=nocturne-login
+Theme-API=2.0
+QtVersion=6
