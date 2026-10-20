@@ -75,7 +75,7 @@ dimBackground=0.4
 | `clockFormat` | `HH:mm` | Formato de hora de Qt (por ejemplo `hh:mm AP`). |
 | `dateFormat` | `dddd, d MMMM` | Formato de fecha de Qt. |
 | `showUserSelector` | `auto` | `auto` (solo si hay varios usuarios), `true` o `false`. |
-| `showSessionSelector` | `true` | Selector de sesion (Plasma Wayland/X11...). |
+| `showSessionSelector` | `auto` | Selector de sesion (Plasma Wayland/X11...): `auto` (solo si hay varias sesiones; discreto al final del panel), `true` o `false`. |
 | `showPowerButtons` | `true` | Botones de apagar, reiniciar y suspender. |
 | `showHibernate` | `false` | Anade el boton de hibernar si el sistema lo permite. |
 | `baseColor` `panelColor` `fieldColor` `borderColor` | Catppuccin Mocha | Colores. `panelColor` usa `#AARRGGBB` (los dos primeros digitos son la opacidad). |
@@ -86,8 +86,8 @@ Todo se escala segun la altura de pantalla (referencia: 1080 px), asi que funcio
 
 ## Estado
 
-- Probado con 6 casos automaticos que cargan el QML con datos de prueba (1080p, 1440p con dos usuarios y panel a
-  la izquierda, 768p, configuracion invalida, login fallido, sin botones): sin errores ni avisos de QML.
+- Probado con 7 casos automaticos que cargan el QML con datos de prueba (1080p, una y dos sesiones, 1440p con dos
+  usuarios y panel a la izquierda, 768p, configuracion invalida, login fallido, sin botones): sin errores ni avisos de QML.
 - **Todavia no se ha probado dentro de SDDM real.** Si encuentras errores, abre una issue con la salida del modo de prueba.
 - Pendiente: avatar del usuario, teclado virtual y traducciones.
 

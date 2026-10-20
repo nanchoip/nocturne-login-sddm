@@ -115,6 +115,7 @@ def main():
     ap.add_argument("--size", default="1920x1080")
     ap.add_argument("--config", default="{}", help="JSON con valores de theme.conf")
     ap.add_argument("--users", default='[["nancho","Nancho"]]', help="JSON: lista de [usuario, nombre real]")
+    ap.add_argument("--sessions", default='[["Plasma (Wayland)"]]', help="JSON: lista de sesiones, p. ej. [[\"Plasma (Wayland)\"],[\"Plasma (X11)\"]]")
     ap.add_argument("--fail", action="store_true", help="simula login fallido antes de capturar")
     ap.add_argument("--allow-missing-image", action="store_true",
                     help="no tratar como error que falte la imagen de fondo (caso de prueba)")
@@ -127,7 +128,7 @@ def main():
     view.setResizeMode(QQuickView.SizeRootObjectToView)
     ctx = view.rootContext()
     users = UserModel(json.loads(args.users))
-    sessions = UserModel([["Plasma (Wayland)"], ["Plasma (X11)"]])
+    sessions = UserModel(json.loads(args.sessions))
     sddm = FakeSddm()
     ctx.setContextProperty("config", json.loads(args.config))
     ctx.setContextProperty("userModel", users)

@@ -39,7 +39,9 @@ Rectangle {
     readonly property string clockFormat: String(cfg("clockFormat", "HH:mm"))
     readonly property string dateFormat: String(cfg("dateFormat", "dddd, d MMMM"))
     readonly property bool showClock: cfgBool("showClock", true)
-    readonly property bool showSessionSelector: cfgBool("showSessionSelector", true)
+    readonly property string sessionSelectorMode: String(cfg("showSessionSelector", "auto")).toLowerCase()
+    readonly property bool showSessionSelector: sessionSelectorMode === "true"
+                                                || (sessionSelectorMode !== "false" && sessionModel.count > 1)
     readonly property bool showPower: cfgBool("showPowerButtons", true)
     readonly property bool showHibernate: cfgBool("showHibernate", false)
     readonly property string userSelector: String(cfg("showUserSelector", "auto")).toLowerCase()
@@ -236,21 +238,6 @@ Rectangle {
                 onClicked: root.tryLogin()
             }
 
-            ThemedCombo {
-                id: sessionBox
-                Layout.fillWidth: true
-                scaleUnit: root.u
-                fieldColor: root.fieldColor
-                borderColor: root.borderColor
-                accentColor: root.accentColor
-                textColor: root.textColor
-                mutedColor: root.mutedColor
-                visible: root.showSessionSelector
-                model: sessionModel
-                textRole: "name"
-                currentIndex: sessionModel.lastIndex
-            }
-
             RowLayout {
                 Layout.fillWidth: true
                 visible: root.showPower
@@ -300,6 +287,27 @@ Rectangle {
                     visible: root.showHibernate && sddm.canHibernate
                     onClicked: sddm.hibernate()
                 }
+            }
+
+            // Selector de sesion: oculto si solo hay una; si hay varias, discreto al final del panel.
+            // Siempre existe (aunque no se vea) porque sddm.login necesita su indice.
+            ThemedCombo {
+                id: sessionBox
+                Layout.fillWidth: true
+                Layout.topMargin: 10 * root.u
+                Layout.preferredHeight: 30 * root.u
+                font.pixelSize: 12 * root.u
+                opacity: 0.75
+                scaleUnit: root.u
+                fieldColor: root.fieldColor
+                borderColor: root.borderColor
+                accentColor: root.accentColor
+                textColor: root.textColor
+                mutedColor: root.mutedColor
+                visible: root.showSessionSelector
+                model: sessionModel
+                textRole: "name"
+                currentIndex: sessionModel.lastIndex
             }
         }
     }

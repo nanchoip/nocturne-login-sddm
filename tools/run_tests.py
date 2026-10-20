@@ -14,7 +14,8 @@ SCRIPT = os.path.join(ROOT, "tools", "render_preview.py")
 
 CASES = [
     ("defecto-1080p", ["--out", os.path.join(ROOT, "preview.png")]),
-    ("izquierda-1440p-dos-usuarios", ["--size", "2560x1440",
+    ("dos-sesiones-selector-discreto", ["--sessions", '[["Plasma (Wayland)"],["Plasma (X11)"]]']),
+    ("izquierda-1440p-dos-usuarios", ["--size", "2560x1440", "--sessions", '[["Plasma (Wayland)"],["Plasma (X11)"]]',
         "--config", '{"panelSide":"left","showHibernate":"true","accentColor":"#89b4fa","dimBackground":"0.5"}',
         "--users", '[["nancho","Nancho Perez"],["invitado",""]]']),
     ("pantalla-pequena-768p", ["--size", "1366x768"]),
