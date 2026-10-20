@@ -1,7 +1,7 @@
 # Nocturne Login (tema para SDDM)
 
-Pantalla de inicio de sesion oscura para **SDDM con Qt 6**: reloj grande a la izquierda y panel lateral
-translucido a la derecha con usuario, contrasena, sesion y botones de apagado.
+Pantalla de inicio de sesion oscura para **SDDM con Qt 6**: reloj grande a un lado y panel lateral
+translucido (sin desenfoque) con usuario, contrasena, sesion y botones de apagado.
 Usa la paleta Catppuccin Mocha. Es un diseno independiente, escrito desde cero (no deriva de otros temas)
 y no es un proyecto oficial de Catppuccin.
 
@@ -19,7 +19,7 @@ de Fedora KDE, porque ese gestor no admite temas QML propios. Comprueba cual tie
 systemctl status display-manager --no-pager | head -n 5
 ```
 
-Si ves `plasmalogin.service`, necesitas cambiar a SDDM antes de poder usar este tema (ver abajo).
+Si ves `plasmalogin.service`, necesitas cambiar a SDDM antes de poder usar este tema.
 
 ## Instalacion
 
@@ -43,40 +43,60 @@ Si algo falla, los errores de QML salen en esa terminal.
 
 ### Activarlo (si SDDM es tu gestor)
 
+`/etc/sddm.conf` tiene prioridad sobre los ajustes de `/etc/sddm.conf.d/`:
+
 ```bash
-sudo mkdir -p /etc/sddm.conf.d
-printf '[Theme]\nCurrent=nocturne-login\n' | sudo tee /etc/sddm.conf.d/10-nocturne.conf
+printf '[Theme]\nCurrent=nocturne-login\n' | sudo tee /etc/sddm.conf
 ```
 
 Rescate si algo sale mal: `Ctrl + Alt + F3`, inicia sesion y ejecuta
-`sudo rm /etc/sddm.conf.d/10-nocturne.conf && sudo reboot`.
+`sudo rm /etc/sddm.conf && sudo reboot`.
 
-## Personalizar
+## Configuracion
 
-No edites el tema directamente: crea `/usr/share/sddm/themes/nocturne-login/theme.conf.user` con solo lo que quieras
-cambiar, por ejemplo tu propio fondo y otro color de acento:
+No edites `theme.conf` directamente (se pisa al reinstalar): crea
+`/usr/share/sddm/themes/nocturne-login/theme.conf.user` con solo lo que quieras cambiar. Ejemplo:
 
 ```ini
 [General]
 background=/usr/share/backgrounds/mi-fondo.jpg
+panelSide=left
 accentColor=#89b4fa
+dimBackground=0.4
 ```
 
-Valores disponibles: `background`, `baseColor`, `panelColor`, `fieldColor`, `borderColor`, `accentColor`,
-`textColor`, `mutedColor`, `dangerColor` (ver `theme.conf`).
+| Opcion | Por defecto | Descripcion |
+|---|---|---|
+| `background` | `backgrounds/default.png` | Imagen de fondo (ruta relativa al tema o absoluta). Si no existe, se usa `baseColor`. |
+| `dimBackground` | `0.2` | Oscurece el fondo, de 0 a 1. |
+| `panelSide` | `right` | Lado del panel: `right` o `left`. El reloj va al contrario. |
+| `panelWidthPercent` | `26` | Ancho del panel en % de pantalla (18 a 60). |
+| `showClock` | `true` | Mostrar reloj y fecha. |
+| `clockFormat` | `HH:mm` | Formato de hora de Qt (por ejemplo `hh:mm AP`). |
+| `dateFormat` | `dddd, d MMMM` | Formato de fecha de Qt. |
+| `showUserSelector` | `auto` | `auto` (solo si hay varios usuarios), `true` o `false`. |
+| `showSessionSelector` | `true` | Selector de sesion (Plasma Wayland/X11...). |
+| `showPowerButtons` | `true` | Botones de apagar, reiniciar y suspender. |
+| `showHibernate` | `false` | Anade el boton de hibernar si el sistema lo permite. |
+| `baseColor` `panelColor` `fieldColor` `borderColor` | Catppuccin Mocha | Colores. `panelColor` usa `#AARRGGBB` (los dos primeros digitos son la opacidad). |
+| `accentColor` `accentTextColor` | `#cba6f7` `#11111b` | Color de acento y color del texto sobre el acento. |
+| `textColor` `mutedColor` `dangerColor` | ver `theme.conf` | Texto, texto secundario y errores. |
+
+Todo se escala segun la altura de pantalla (referencia: 1080 px), asi que funciona en 768p, 1440p o 4K.
 
 ## Estado
 
-- El QML se valida cargandolo con PySide6 y datos de prueba; **todavia no se ha probado dentro de SDDM real**.
-  Si encuentras errores, abre una issue con la salida del modo de prueba.
+- Probado con 6 casos automaticos que cargan el QML con datos de prueba (1080p, 1440p con dos usuarios y panel a
+  la izquierda, 768p, configuracion invalida, login fallido, sin botones): sin errores ni avisos de QML.
+- **Todavia no se ha probado dentro de SDDM real.** Si encuentras errores, abre una issue con la salida del modo de prueba.
 - Pendiente: avatar del usuario, teclado virtual y traducciones.
 
-## Regenerar el fondo y la vista previa
+## Desarrollo
 
 ```bash
 pip install pillow PySide6-Essentials
-python tools/make_background.py
-python tools/render_preview.py
+python tools/make_background.py   # regenera el fondo por defecto
+python tools/run_tests.py         # ejecuta los casos y regenera preview.png
 ```
 
 ## Licencia

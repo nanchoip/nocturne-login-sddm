@@ -3,51 +3,64 @@ import QtQuick.Controls 2.15
 
 ComboBox {
     id: control
-    implicitHeight: 40
-    font.pixelSize: 15
+
+    property real scaleUnit: 1
+    property color fieldColor: "#313244"
+    property color borderColor: "#45475a"
+    property color accentColor: "#cba6f7"
+    property color textColor: "#cdd6f4"
+    property color mutedColor: "#9399b2"
+
+    implicitHeight: 40 * scaleUnit
+    font.pixelSize: 15 * scaleUnit
+
+    function labelAt(modelObj, modelDataObj) {
+        if (!control.textRole) return modelDataObj
+        return Array.isArray(control.model) ? modelDataObj[control.textRole] : modelObj[control.textRole]
+    }
 
     delegate: ItemDelegate {
         width: control.width
         highlighted: control.highlightedIndex === index
         contentItem: Text {
-            text: model[control.textRole]
-            color: "#cdd6f4"
+            text: control.labelAt(model, modelData)
+            color: control.textColor
             font: control.font
             elide: Text.ElideRight
             verticalAlignment: Text.AlignVCenter
         }
         background: Rectangle {
-            color: highlighted ? "#45475a" : "transparent"
+            color: highlighted ? control.borderColor : "transparent"
         }
     }
 
     indicator: Text {
-        x: control.width - width - 12
+        x: control.width - width - 12 * control.scaleUnit
         y: (control.height - height) / 2
         text: "▾"
-        color: "#9399b2"
-        font.pixelSize: 14
+        color: control.mutedColor
+        font.pixelSize: 14 * control.scaleUnit
     }
 
     contentItem: Text {
-        leftPadding: 12
-        rightPadding: 30
+        leftPadding: 12 * control.scaleUnit
+        rightPadding: 30 * control.scaleUnit
         text: control.displayText
-        color: "#cdd6f4"
+        color: control.textColor
         font: control.font
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
     }
 
     background: Rectangle {
-        radius: 8
-        color: "#313244"
+        radius: 8 * control.scaleUnit
+        color: control.fieldColor
         border.width: 1
-        border.color: control.activeFocus ? "#cba6f7" : "#45475a"
+        border.color: control.activeFocus ? control.accentColor : control.borderColor
     }
 
     popup: Popup {
-        y: control.height + 4
+        y: control.height + 4 * control.scaleUnit
         width: control.width
         implicitHeight: contentItem.implicitHeight + 2
         padding: 1
@@ -60,10 +73,10 @@ ComboBox {
         }
 
         background: Rectangle {
-            radius: 8
-            color: "#313244"
+            radius: 8 * control.scaleUnit
+            color: control.fieldColor
             border.width: 1
-            border.color: "#45475a"
+            border.color: control.borderColor
         }
     }
 }
