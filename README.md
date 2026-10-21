@@ -74,6 +74,7 @@ dimBackground=0.4
 | `showClock` | `true` | Mostrar reloj y fecha. |
 | `clockFormat` | `HH:mm` | Formato de hora de Qt (por ejemplo `hh:mm AP`). |
 | `dateFormat` | `dddd, d MMMM` | Formato de fecha de Qt. |
+| `locale` | *(vacio)* | Idioma de la fecha. Vacio usa el del sistema; si el login sale en ingles, pon `es_ES`. |
 | `showUserSelector` | `auto` | `auto` (solo si hay varios usuarios), `true` o `false`. |
 | `showSessionSelector` | `auto` | Selector de sesion (Plasma Wayland/X11...): `auto` (solo si hay varias sesiones; discreto al final del panel), `true` o `false`. |
 | `showPowerButtons` | `true` | Botones de apagar, reiniciar y suspender. |

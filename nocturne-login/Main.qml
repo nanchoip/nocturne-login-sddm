@@ -36,6 +36,8 @@ Rectangle {
     readonly property bool panelOnRight: String(cfg("panelSide", "right")).toLowerCase() !== "left"
     readonly property real panelPercent: cfgNum("panelWidthPercent", 26, 18, 60)
     readonly property real dim: cfgNum("dimBackground", 0.2, 0, 1)
+    // Idioma de la fecha: vacio = el del sistema; p. ej. es_ES si SDDM arranca en ingles
+    readonly property var uiLocale: String(cfg("locale", "")) === "" ? Qt.locale() : Qt.locale(String(cfg("locale", "")))
     readonly property string clockFormat: String(cfg("clockFormat", "HH:mm"))
     readonly property string dateFormat: String(cfg("dateFormat", "dddd, d MMMM"))
     readonly property bool showClock: cfgBool("showClock", true)
@@ -118,7 +120,7 @@ Rectangle {
             font.weight: Font.Medium
         }
         Text {
-            text: root.cap(Qt.locale().toString(root.now, root.dateFormat))
+            text: root.cap(root.uiLocale.toString(root.now, root.dateFormat))
             color: root.mutedColor
             font.pixelSize: 28 * root.u
         }
